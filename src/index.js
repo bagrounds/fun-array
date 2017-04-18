@@ -10,6 +10,7 @@
 
   /* exports */
   module.exports = {
+    length: length,
     reIndex: curry(reIndex),
     of: of,
     empty: empty,
@@ -21,6 +22,18 @@
     filter: curry(filter),
     reverse: reverse,
     sort: curry(sort)
+  }
+
+  /**
+   *
+   * @function module:fun-array.length
+   *
+   * @param {Array} source - to take length of
+   *
+   * @return {Number} of elements in this array
+   */
+  function length (source) {
+    return source.length
   }
 
   /**
