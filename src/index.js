@@ -21,7 +21,24 @@
     set: curry(set),
     filter: curry(filter),
     reverse: reverse,
-    sort: curry(sort)
+    sort: curry(sort),
+    zipWith: curry(zipWith)
+  }
+
+  /**
+   *
+   * @function module:fun-array.zipWith
+   *
+   * @param {Function} f - to apply to each pair of elements from a1 and a2
+   * @param {Array} a1 - first arguments to f
+   * @param {Array} a2 - second arguments to f
+   *
+   * @return {Array} [f(a1[0], a2[0]), f(a1[1], a2[1]), ...]
+   */
+  function zipWith (f, a1, a2) {
+    return a1.map(function (v, i) {
+      return f(v, a2[i])
+    })
   }
 
   /**
