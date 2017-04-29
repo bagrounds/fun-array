@@ -12,7 +12,7 @@ Functions for working with arrays functionally
 
 ## [Test Coverage](https://bagrounds.gitlab.io/fun-array/coverage/lcov-report/index.html)
 
-## [API Docs](https://bagrounds.gitlab.io/fun-array/docs/index.html)
+## [API Docs](https://bagrounds.gitlab.io/fun-scalar/index.html)
 
 ## Dependencies
 
