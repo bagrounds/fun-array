@@ -37,9 +37,9 @@
   },
   "dependencies": {
     "fun-curry": "^0.2.6",
-    "fun-function": "^0.1.1",
+    "fun-function": "^0.2.0",
     "fun-predicate": "^0.15.2",
     "fun-scalar": "^0.1.1",
-    "fun-unfold": "^0.2.0"
+    "fun-unfold": "^0.3.0"
   }
 }

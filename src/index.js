@@ -52,7 +52,81 @@
     first: first,
     unfold: curry(unfold),
     iterate: curry(iterate),
-    iterateN: curry(iterateN)
+    iterateN: curry(iterateN),
+    cartesian: curry(cartesian),
+    cartesianN: curry(cartesianN),
+    flatten: flatten,
+    flattenR: flattenR,
+    isArray: isArray
+  }
+
+  /**
+   *
+   * @function module:fun-array.cartesian
+   *
+   * @param {Array} a1 - first array
+   * @param {Array} a2 - second array
+   *
+   * @return {Array<Array>} the cartesian product of the elements of a1 and a2
+   */
+  function cartesian (a1, a2) {
+    return a1.map(function (i) {
+      return a2.map(function (j) {
+        return [i, j]
+      })
+    }).reduce(concat, [])
+  }
+
+  /**
+   *
+   * @function module:fun-array.cartesianN
+   *
+   * @param {Array<Array>} arrays - to multiply
+   *
+   * @return {Array<Array>} the n-fold cartesian product of arrays
+   */
+  function cartesianN (arrays) {
+    return arrays.reduce(function (result, next) {
+      return cartesian(result, next).map(function (pair) {
+        return append(pair[1], pair[0])
+      })
+    }, [[]])
+  }
+
+  /**
+   *
+   * @function module:fun-array.flattenR
+   *
+   * @param {Array} array - to flatten
+   *
+   * @return {Array} recursively flattened array
+   */
+  function flattenR (array) {
+    return unfold(flatten, curry(all)(predicate.not(isArray)), array)
+  }
+
+  /**
+   *
+   * @function module:fun-array.isArray
+   *
+   * @param {*} a - anything
+   *
+   * @return {Boolean} if a is an instanceof Array
+   */
+  function isArray (a) {
+    return a instanceof Array
+  }
+
+  /**
+   *
+   * @function module:fun-array.flatten
+   *
+   * @param {Array} array - to flatten
+   *
+   * @return {Array} with one level of nested arrays removed
+   */
+  function flatten (array) {
+    return Array.prototype.concat.apply([], array)
   }
 
   /**
@@ -60,13 +134,13 @@
    * @function module:fun-array.unfold
    *
    * @param {Function} next - Array -> Array
-   * @param {Function} p - Array -> Boolean
+   * @param {Function} stop - Array -> Boolean (stopping condition)
    * @param {Array} seed - inial array
    *
    * @return {Array} seed unfolded with next until stop => true
    */
-  function unfold (next, p, seed) {
-    return funUnfold(next, p, seed)
+  function unfold (next, stop, seed) {
+    return funUnfold(next, stop, seed)
   }
 
   /**
@@ -80,11 +154,11 @@
    * @return {Array} [seed, f(seed), f(f(seed)) ...] (length n)
    */
   function iterateN (f, n, seed) {
-    return unfold(next, fn.compose(lte(n), length), [seed])
+    return unfold(next, fn.compose(gt(n), length), [seed])
 
-    function lte (n) {
+    function gt (n) {
       return function (x) {
-        return x <= n
+        return x > n
       }
     }
 
@@ -98,13 +172,13 @@
    * @function module:fun-array.iterate
    *
    * @param {Function} f - a -> a
-   * @param {Function} p - a -> Boolean
+   * @param {Function} stop - a -> Boolean (stopping condition)
    * @param {*} seed - inial value
    *
    * @return {Array} [seed, f(seed), f(f(seed)) ...] (length n)
    */
-  function iterate (f, p, seed) {
-    return unfold(next, fn.compose(p, last), [seed])
+  function iterate (f, stop, seed) {
+    return unfold(next, fn.compose(stop, last), [seed])
 
     function next (array) {
       return append(f(last(array)), array)
