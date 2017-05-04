@@ -16,7 +16,7 @@
     "lint": "eslint --ignore-path .gitignore --fix .",
     "predocument": "rm -rf docs",
     "document": "jsdoc -c .jsdoc.json",
-    "browserify": "browserify src/index.js -o dist/bundle.js",
+    "browserify": "browserify dist/entry.js -o dist/bundle.js",
     "readme": "cat readme/* > README.md"
   },
   "repository": {

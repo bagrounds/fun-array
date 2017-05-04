@@ -1,0 +1,2 @@
+funArray = require('../src')
+
