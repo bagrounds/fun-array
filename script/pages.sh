@@ -14,5 +14,7 @@ mv coverage public/
 
 mv img public/
 
+npm run browserify
+
 exit 0
 

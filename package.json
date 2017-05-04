@@ -8,7 +8,7 @@
     "test": "tap -Rtap --coverage-report=text-summary ./test/index.js",
     "coverage": "tap --coverage-report=lcov ./test/index.js",
     "predependencies": "mkdir -p img",
-    "dependencies": "madge . --image img/dependencies.svg -x 'public|test|coverage|docs' --include-npm",
+    "dependencies": "madge src --image img/dependencies.svg -x 'public|test|coverage|docs' --include-npm",
     "postdependencies": "npm run dependencies-test",
     "dependencies-test": "madge . --image img/dependencies-test.svg -x 'public|coverage|docs' --include-npm",
     "pages-index": "showdown makehtml -i README.md -o public/index.html",
@@ -16,6 +16,7 @@
     "lint": "eslint --ignore-path .gitignore --fix .",
     "predocument": "rm -rf docs",
     "document": "jsdoc -c .jsdoc.json",
+    "browserify": "browserify src/index.js -o dist/bundle.js",
     "readme": "cat readme/* > README.md"
   },
   "repository": {
@@ -33,6 +34,7 @@
     "eslint": "^3.18.0",
     "jsdoc": "^3.4.3",
     "madge": "^1.6.0",
+    "browserify": "^14.3.0",
     "tap": "^10.3.1"
   },
   "dependencies": {
