@@ -6,56 +6,54 @@
   'use strict'
 
   /* imports */
-  var curry = require('fun-curry')
   var predicate = require('fun-predicate')
   var fn = require('fun-function')
-  var scalar = require('fun-scalar')
-  var funUnfold = require('fun-unfold')
+  var funUnfold = require('./lib/fun-unfold')
 
   /* exports */
   module.exports = {
     length: length,
-    reIndex: curry(reIndex),
+    reIndex: fn.curry(reIndex),
     of: of,
     from: from,
     empty: empty,
-    concat: curry(concat),
-    map: curry(map),
-    ap: curry(ap),
-    get: curry(get),
-    set: curry(set),
-    filter: curry(filter),
+    concat: fn.curry(concat),
+    map: fn.curry(map),
+    ap: fn.curry(ap),
+    get: fn.curry(get),
+    set: fn.curry(set),
+    filter: fn.curry(filter),
     reverse: reverse,
-    sort: curry(sort),
-    zipWith: curry(zipWith),
-    fold: curry(fold),
-    take: curry(take),
-    takeWhile: curry(takeWhile),
-    drop: curry(drop),
-    dropWhile: curry(dropWhile),
-    slice: curry(slice),
-    split: curry(split),
-    partition: curry(partition),
+    sort: fn.curry(sort),
+    zipWith: fn.curry(zipWith),
+    fold: fn.curry(fold),
+    take: fn.curry(take),
+    takeWhile: fn.curry(takeWhile),
+    drop: fn.curry(drop),
+    dropWhile: fn.curry(dropWhile),
+    slice: fn.curry(slice),
+    split: fn.curry(split),
+    partition: fn.curry(partition),
     unique: unique,
-    union: curry(union),
-    intersect: curry(intersect),
-    contains: curry(contains),
-    insert: curry(insert),
-    append: curry(append),
-    prepend: curry(prepend),
-    all: curry(all),
-    any: curry(any),
+    union: fn.curry(union),
+    intersect: fn.curry(intersect),
+    contains: fn.curry(contains),
+    insert: fn.curry(insert),
+    append: fn.curry(append),
+    prepend: fn.curry(prepend),
+    all: fn.curry(all),
+    any: fn.curry(any),
     index: index,
-    range: curry(range),
-    repeat: curry(repeat),
-    sequence: curry(sequence),
+    range: fn.curry(range),
+    repeat: fn.curry(repeat),
+    sequence: fn.curry(sequence),
     last: last,
     first: first,
-    unfold: curry(unfold),
-    iterate: curry(iterate),
-    iterateN: curry(iterateN),
-    cartesian: curry(cartesian),
-    cartesianN: curry(cartesianN),
+    unfold: fn.curry(unfold),
+    iterate: fn.curry(iterate),
+    iterateN: fn.curry(iterateN),
+    cartesian: fn.curry(cartesian),
+    cartesianN: fn.curry(cartesianN),
     flatten: flatten,
     flattenR: flattenR,
     isArray: isArray
@@ -103,7 +101,7 @@
    * @return {Array} recursively flattened array
    */
   function flattenR (array) {
-    return unfold(flatten, curry(all)(predicate.not(isArray)), array)
+    return unfold(flatten, fn.curry(all)(predicate.not(isArray)), array)
   }
 
   /**
@@ -224,7 +222,11 @@
    * @return {Array<Number>} [first, ..., last]
    */
   function range (first, last) {
-    return sequence(scalar.sum(first), last - first + 1)
+    return sequence(addFirst, last - first + 1)
+
+    function addFirst (number) {
+      return first + number
+    }
   }
 
   /**
