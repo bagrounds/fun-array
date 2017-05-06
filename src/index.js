@@ -17,6 +17,7 @@
     length: length,
     reIndex: curry(reIndex),
     of: of,
+    from: from,
     empty: empty,
     concat: curry(concat),
     map: curry(map),
@@ -642,6 +643,18 @@
    */
   function of (value) {
     return [value]
+  }
+
+  /**
+   *
+   * @function module:fun-array.from
+   *
+   * @param {*} arrayLike - an object with numeric keys and a length property
+   *
+   * @return {Array} converted from arrayLike
+   */
+  function from (arrayLike) {
+    return Array.prototype.slice.call(arrayLike)
   }
 
   /**
