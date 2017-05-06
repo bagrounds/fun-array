@@ -6,8 +6,8 @@
   'use strict'
 
   /* imports */
-  var predicate = require('fun-predicate')
   var fn = require('fun-function')
+  var not = fn.curry(require('./lib/not'))
   var funUnfold = require('./lib/fun-unfold')
 
   /* exports */
@@ -101,7 +101,7 @@
    * @return {Array} recursively flattened array
    */
   function flattenR (array) {
-    return unfold(flatten, fn.curry(all)(predicate.not(isArray)), array)
+    return unfold(flatten, fn.curry(all)(not(isArray)), array)
   }
 
   /**
@@ -376,7 +376,7 @@
    * @return {Array<Array>} [filter(p, source), filter(not(p), souce)]
    */
   function partition (p, source) {
-    return [filter(p, source), filter(predicate.not(p), source)]
+    return [filter(p, source), filter(not(p), source)]
   }
 
   /**
@@ -389,7 +389,7 @@
    * @return {Array} suffix of source from first element to pass p
    */
   function dropWhile (p, source) {
-    return drop(source.findIndex(predicate.not(p)), source)
+    return drop(source.findIndex(not(p)), source)
   }
 
   /**
@@ -402,7 +402,7 @@
    * @return {Array} prefix of source for which p is true
    */
   function takeWhile (p, source) {
-    return take(source.findIndex(predicate.not(p)), source)
+    return take(source.findIndex(not(p)), source)
   }
 
   /**
