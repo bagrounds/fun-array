@@ -153,7 +153,7 @@
    * @return {Array} [seed, f(seed), f(f(seed)) ...] (length n)
    */
   function iterateN (f, n, seed) {
-    return unfold(next, fn.compose(gt(n), length), [seed])
+    return unfold(next, fn.compose(gt(n - 1), length), [seed])
 
     function gt (n) {
       return function (x) {
