@@ -12,6 +12,7 @@
 
   /* exports */
   module.exports = {
+    permute: permute,
     length: length,
     reIndex: fn.curry(reIndex),
     of: of,
@@ -39,6 +40,7 @@
     intersect: fn.curry(intersect),
     contains: fn.curry(contains),
     insert: fn.curry(insert),
+    remove: fn.curry(remove),
     append: fn.curry(append),
     prepend: fn.curry(prepend),
     all: fn.curry(all),
@@ -57,6 +59,24 @@
     flatten: flatten,
     flattenR: flattenR,
     isArray: isArray
+  }
+
+  /**
+   *
+   * @function module:fun-array.permute
+   *
+   * @param {Array} a - array to find permutations of
+   *
+   * @return {Array<Array>} all permutations of elements of a
+   */
+  function permute (a) {
+    return !a.length
+      ? a
+      : a.length === 1
+      ? [a]
+      : flatten(a.map(function (e, i) {
+        return permute(remove(i, a)).map(fn.curry(prepend)(e))
+      }))
   }
 
   /**
@@ -309,6 +329,22 @@
    */
   function insert (i, v, source) {
     return [take(i, source), [v], drop(i, source)].reduce(concat)
+  }
+
+  /**
+   *
+   * @function module:fun-array.remove
+   *
+   * @param {Number} i - index to remove
+   * @param {Array} source - to remove from
+   *
+   * @return {Array} source without the element at i
+   */
+  function remove (i, source) {
+    var result = source.map(fn.id)
+    result.splice(i, 1)
+
+    return result
   }
 
   /**
