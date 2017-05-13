@@ -58,7 +58,41 @@
     cartesianN: fn.curry(cartesianN),
     flatten: flatten,
     flattenR: flattenR,
-    isArray: isArray
+    isArray: isArray,
+    leftPad: fn.curry(leftPad),
+    rightPad: fn.curry(rightPad)
+  }
+
+  /**
+   *
+   * @function module:fun-array.rightPad
+   *
+   * @param {*} value - to pad with
+   * @param {Number} length - of resulting Array
+   * @param {Array} a - to pad
+   *
+   * @return {Array} padded with value to length
+   */
+  function rightPad (value, length, a) {
+    return a.length >= length
+      ? a
+      : a.concat(repeat(length - a.length, value))
+  }
+
+  /**
+   *
+   * @function module:fun-array.leftPad
+   *
+   * @param {*} value - to pad with
+   * @param {Number} length - of resulting Array
+   * @param {Array} a - to pad
+   *
+   * @return {Array} padded with value to length
+   */
+  function leftPad (value, length, a) {
+    return a.length >= length
+      ? a
+      : repeat(length - a.length, value).concat(a)
   }
 
   /**

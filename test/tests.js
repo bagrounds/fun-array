@@ -17,6 +17,14 @@
   }
 
   var equalityTests = [
+    [['a', 2, ['a', 'b', 'c']], ['a', 'b', 'c'], 'rightPad'],
+    [['a', 2, ['b', 'c']], ['b', 'c'], 'rightPad'],
+    [['a', 4, ['b']], ['b', 'a', 'a', 'a'], 'rightPad'],
+    [['a', 4, []], ['a', 'a', 'a', 'a'], 'rightPad'],
+    [['a', 2, ['a', 'b', 'c']], ['a', 'b', 'c'], 'leftPad'],
+    [['a', 2, ['b', 'c']], ['b', 'c'], 'leftPad'],
+    [['a', 4, ['b']], ['a', 'a', 'a', 'b'], 'leftPad'],
+    [['a', 4, []], ['a', 'a', 'a', 'a'], 'leftPad'],
     [[2, [0, 1, 2, 3]], [0, 1, 3], 'remove'],
     [[[]], [], 'permute'],
     [[[0]], [[0]], 'permute'],
