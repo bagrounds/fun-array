@@ -107,10 +107,10 @@
     return !a.length
       ? a
       : a.length === 1
-      ? [a]
-      : flatten(a.map(function (e, i) {
-        return permute(remove(i, a)).map(fn.curry(prepend)(e))
-      }))
+        ? [a]
+        : flatten(a.map(function (e, i) {
+          return permute(remove(i, a)).map(fn.curry(prepend)(e))
+        }))
   }
 
   /**
