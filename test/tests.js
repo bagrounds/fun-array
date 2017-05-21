@@ -8,6 +8,10 @@
   var arrange = require('fun-arrange')
   var scalar = require('fun-scalar')
 
+  function add (a, b) {
+    return a + b
+  }
+
   function append1 (a) {
     return a.concat(1)
   }
@@ -87,6 +91,7 @@
     [[[scalar.sum(3)], [1, 2]], [4, 2], 'ap'],
     [[[scalar.sum(3), scalar.dot(4)], [1, 2]], [4, 8], 'ap'],
     [[scalar.sum(3), [1, 2]], [4, 5], 'map'],
+    [[add, ['1', '2']], ['1undefined', '2undefined'], 'map'],
     [[['a', 'b'], ['c', 'd']], ['a', 'b', 'c', 'd'], 'concat'],
     [[{ length: 2, 0: 'a', 1: 'b' }], ['a', 'b'], 'from'],
     [['abc'], ['a', 'b', 'c'], 'from'],

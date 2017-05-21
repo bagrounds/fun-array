@@ -625,7 +625,7 @@
    * @return {Array} [f(source[1]), f(source[2]), ...]
    */
   function map (f, source) {
-    return source.map(f)
+    return source.map(fn.compose(f, fn.arg(0)))
   }
 
   /**
