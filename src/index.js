@@ -61,7 +61,24 @@
     isArray: isArray,
     leftPad: fn.curry(leftPad),
     rightPad: fn.curry(rightPad),
-    span: fn.curry(span)
+    span: fn.curry(span),
+    spanPrefix: fn.curry(spanPrefix),
+    pushShift: pushShift,
+    popUnshift: popUnshift,
+    takeWhilePrefix: fn.curry(takeWhilePrefix)
+  }
+
+  /**
+   *
+   * @function module:fun-array.spanPrefix
+   *
+   * @param {Function} predicate - [*] -> Bool
+   * @param {Array} a - to span prefix
+   *
+   * @return {Array<Array>} [prefix satisfying predicate, rest]
+   */
+  function spanPrefix (predicate, a) {
+    return split(takeWhilePrefix(predicate, a).length, a)
   }
 
   /**
@@ -71,7 +88,7 @@
    * @param {Function} predicate - * -> Bool
    * @param {Array} a - to span
    *
-   * @return {Array<Array>} [prefix satisfying predicate, rest]
+   * @return {Array<Array>} [prefix of elements satisfying predicate, rest]
    */
   function span (predicate, a) {
     return [takeWhile(predicate, a), dropWhile(predicate, a)]
@@ -474,6 +491,49 @@
    */
   function dropWhile (p, source) {
     return drop(source.findIndex(not(p)), source)
+  }
+
+  /**
+   *
+   * @function module:fun-array.popUnshift
+   *
+   * @param {Array<Array>} a - [[a1, ... an-1, an], [b1 ... bn]]
+   *
+   * @return {Array<Array>} [[a1, ... an-1], [an, b1 ... bn]]
+   */
+  function popUnshift (a) {
+    return a[0].length
+      ? split(a[0].length - 1, concat(a[0], a[1]))
+      : a
+  }
+
+  /**
+   *
+   * @function module:fun-array.pushShift
+   *
+   * @param {Array<Array>} a - [[a1, ... an], [b1, b2, ... bn]]
+   *
+   * @return {Array<Array>} [[a1, ... an, b1], [b2, ... bn]]
+   */
+  function pushShift (a) {
+    return a[1].length
+      ? split(a[0].length + 1, concat(a[0], a[1]))
+      : a
+  }
+
+  /**
+   *
+   * @function module:fun-array.takeWhilePrefix
+   *
+   * @param {Function} p - [element] -> Boolean
+   * @param {Array} source - to get values from
+   *
+   * @return {Array} prefix of source for which p is true
+   */
+  function takeWhilePrefix (p, source) {
+    return source.reduce(function (prefix, e) {
+      return p(prefix) ? append(e, prefix) : prefix
+    }, []).slice(0, -1)
   }
 
   /**

@@ -20,7 +20,23 @@
     return array.length === 3
   }
 
+  function lengthLt3 (array) {
+    return array.length < 3
+  }
+
   var equalityTests = [
+    [[length3, [1, 2, 3, 4, 5]], [[], [1, 2, 3, 4, 5]], 'spanPrefix'],
+    [[lengthLt3, [1, 2, 3, 4, 5]], [[1, 2], [3, 4, 5]], 'spanPrefix'],
+    [[length3, [1, 2, 3, 4, 5]], [], 'takeWhilePrefix'],
+    [[lengthLt3, [1, 2, 3, 4, 5]], [1, 2], 'takeWhilePrefix'],
+    [[[[1, 2, 3], []]], [[1, 2], [3]], 'popUnshift'],
+    [[[[1, 2], [3]]], [[1], [2, 3]], 'popUnshift'],
+    [[[[1], [2, 3]]], [[], [1, 2, 3]], 'popUnshift'],
+    [[[[], [1, 2, 3]]], [[], [1, 2, 3]], 'popUnshift'],
+    [[[[1, 2, 3], []]], [[1, 2, 3], []], 'pushShift'],
+    [[[[1, 2], [3]]], [[1, 2, 3], []], 'pushShift'],
+    [[[[1], [2, 3]]], [[1, 2], [3]], 'pushShift'],
+    [[[[], [1, 2, 3]]], [[1], [2, 3]], 'pushShift'],
     [[scalar.lt(3), [1, 2, 3, 1]], [[1, 2], [3, 1]], 'span'],
     [[scalar.lt(2), [1, 2, 3, 1]], [[1], [2, 3, 1]], 'span'],
     [['a', 2, ['a', 'b', 'c']], ['a', 'b', 'c'], 'rightPad'],
