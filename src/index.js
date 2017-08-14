@@ -60,7 +60,21 @@
     flattenR: flattenR,
     isArray: isArray,
     leftPad: fn.curry(leftPad),
-    rightPad: fn.curry(rightPad)
+    rightPad: fn.curry(rightPad),
+    span: fn.curry(span)
+  }
+
+  /**
+   *
+   * @function module:fun-array.span
+   *
+   * @param {Function} predicate - * -> Bool
+   * @param {Array} a - to span
+   *
+   * @return {Array<Array>} [prefix satisfying predicate, rest]
+   */
+  function span (predicate, a) {
+    return [takeWhile(predicate, a), dropWhile(predicate, a)]
   }
 
   /**

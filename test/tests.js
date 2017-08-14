@@ -21,6 +21,8 @@
   }
 
   var equalityTests = [
+    [[scalar.lt(3), [1, 2, 3, 1]], [[1, 2], [3, 1]], 'span'],
+    [[scalar.lt(2), [1, 2, 3, 1]], [[1], [2, 3, 1]], 'span'],
     [['a', 2, ['a', 'b', 'c']], ['a', 'b', 'c'], 'rightPad'],
     [['a', 2, ['b', 'c']], ['b', 'c'], 'rightPad'],
     [['a', 4, ['b']], ['b', 'a', 'a', 'a'], 'rightPad'],

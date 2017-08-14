@@ -32,20 +32,20 @@
   },
   "homepage": "https://gitlab.com/bagrounds/fun-array#README",
   "devDependencies": {
-    "browserify": "^14.3.0",
+    "browserify": "14.4.0",
     "docdash": "^0.4.0",
-    "eslint": "4.0.0-beta.0",
+    "eslint": "4.4.1",
     "fun-arrange": "^0.1.4",
     "fun-object": "^0.6.3",
     "fun-predicate": "0.16.0",
-    "fun-scalar": "^0.4.0",
+    "fun-scalar": "0.5.6",
     "fun-test": "^0.24.1",
     "fun-test-runner": "^0.9.1",
-    "jsdoc": "^3.4.3",
-    "madge": "^1.6.0",
-    "next-update": "^1.5.1",
-    "tap": "10.3.2",
-    "uglify-js": "3.0.10"
+    "jsdoc": "3.5.4",
+    "madge": "2.0.0",
+    "next-update": "3.5.3",
+    "tap": "10.7.2",
+    "uglify-js": "3.0.27"
   },
   "dependencies": {
     "fun-function": "0.9.1"
