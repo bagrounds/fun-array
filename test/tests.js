@@ -24,7 +24,17 @@
     return array.length < 3
   }
 
+  function strictEqual (a, b) {
+    return a === b
+  }
+
   var equalityTests = [
+    [[strictEqual, [1, 3, 2], [1, 2, 3]], false, 'equal'],
+    [[strictEqual, [1, 2], [1, 2, 3]], false, 'equal'],
+    [[strictEqual, [1, 2, 3], [1, 2]], false, 'equal'],
+    [[strictEqual, [1, 2, 3], [1, '2', 3]], false, 'equal'],
+    [[strictEqual, [1, 2, 3], [1, 2, 3]], true, 'equal'],
+    [[strictEqual, [], []], true, 'equal'],
     [[length3, [1, 2, 3, 4, 5]], [[], [1, 2, 3, 4, 5]], 'spanPrefix'],
     [[lengthLt3, [1, 2, 3, 4, 5]], [[1, 2], [3, 4, 5]], 'spanPrefix'],
     [[length3, [1, 2, 3, 4, 5]], [], 'takeWhilePrefix'],

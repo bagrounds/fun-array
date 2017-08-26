@@ -65,7 +65,31 @@
     spanPrefix: fn.curry(spanPrefix),
     pushShift: pushShift,
     popUnshift: popUnshift,
-    takeWhilePrefix: fn.curry(takeWhilePrefix)
+    takeWhilePrefix: fn.curry(takeWhilePrefix),
+    equal: fn.curry(equal)
+  }
+
+  /**
+   * Structural equality.
+   *
+   * @function module:fun-array.equal
+   *
+   * @param {Function} eq - e -> e -> Bool
+   * @param {Array} a1 - first array
+   * @param {Array} a2 - second array
+   *
+   * @return {Boolean} if a1 and a2 are equal element-wise by eq
+   */
+  function equal (eq, a1, a2) {
+    function and (p1, p2) {
+      return p1 && p2
+    }
+
+    return a1.length === a2.length && fold(
+      and,
+      true,
+      zipWith(eq, a1, a2)
+    )
   }
 
   /**
