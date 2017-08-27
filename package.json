@@ -34,7 +34,7 @@
   "devDependencies": {
     "browserify": "14.4.0",
     "docdash": "^0.4.0",
-    "eslint": "4.4.1",
+    "eslint": "4.5.0",
     "fun-arrange": "^0.1.4",
     "fun-object": "^0.6.3",
     "fun-predicate": "0.16.0",
@@ -42,10 +42,10 @@
     "fun-test": "^0.24.1",
     "fun-test-runner": "^0.9.1",
     "jsdoc": "3.5.4",
-    "madge": "2.0.0",
+    "madge": "2.1.0",
     "next-update": "3.5.3",
     "tap": "10.7.2",
-    "uglify-js": "3.0.27"
+    "uglify-js": "3.0.28"
   },
   "dependencies": {
     "fun-function": "0.9.1"
