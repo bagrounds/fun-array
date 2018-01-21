@@ -23,6 +23,7 @@
     ap: fn.curry(ap),
     get: fn.curry(get),
     set: fn.curry(set),
+    update: fn.curry(update),
     filter: fn.curry(filter),
     reverse: reverse,
     sort: fn.curry(sort),
@@ -771,13 +772,27 @@
    * @param {*} value - to set
    * @param {Array} source - to set value on
    *
-   * @return {Array} copy of source object containing value at key
+   * @return {Array} copy of source containing value at index
    */
   function set (index, value, source) {
     var result = source.map(id)
     result[index] = value
 
     return result
+  }
+
+  /**
+   *
+   * @function module:fun-array.update
+   *
+   * @param {Number} index - to update
+   * @param {Function} f - update function
+   * @param {Array} source - to update value on
+   *
+   * @return {Array} copy of source containing f(value) at index
+   */
+  function update (index, f, source) {
+    return set(index, f(get(index, source)), source)
   }
 
   /**
