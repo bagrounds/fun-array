@@ -1,6 +1,6 @@
 {
   "name": "fun-array",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Functions for working with arrays functionally",
   "main": "src/index.js",
   "browser": "dist/bundle.js",
