@@ -2,73 +2,37 @@
  *
  * @module fun-array
  */
-;(function () {
+;(() => {
   'use strict'
 
   /* imports */
-  var fn = require('fun-function')
-  var not = fn.curry(require('./lib/not'))
-  var funUnfold = require('./lib/fun-unfold')
+  const curry = require('fun-curry')
+  const { inputs } = require('guarded')
+  const { any: anything, vector, vectorOf, tuple, array, arrayOf, fun, num } =
+    require('fun-type')
 
-  /* exports */
-  module.exports = {
-    permute: permute,
-    length: length,
-    reIndex: fn.curry(reIndex),
-    of: of,
-    from: from,
-    empty: empty,
-    concat: fn.curry(concat),
-    map: fn.curry(map),
-    ap: fn.curry(ap),
-    get: fn.curry(get),
-    set: fn.curry(set),
-    update: fn.curry(update),
-    filter: fn.curry(filter),
-    reverse: reverse,
-    sort: fn.curry(sort),
-    zipWith: fn.curry(zipWith),
-    fold: fn.curry(fold),
-    take: fn.curry(take),
-    takeWhile: fn.curry(takeWhile),
-    drop: fn.curry(drop),
-    dropWhile: fn.curry(dropWhile),
-    slice: fn.curry(slice),
-    split: fn.curry(split),
-    partition: fn.curry(partition),
-    unique: unique,
-    union: fn.curry(union),
-    intersect: fn.curry(intersect),
-    contains: fn.curry(contains),
-    insert: fn.curry(insert),
-    remove: fn.curry(remove),
-    append: fn.curry(append),
-    prepend: fn.curry(prepend),
-    all: fn.curry(all),
-    any: fn.curry(any),
-    index: index,
-    range: fn.curry(range),
-    repeat: fn.curry(repeat),
-    sequence: fn.curry(sequence),
-    last: last,
-    first: first,
-    unfold: fn.curry(unfold),
-    iterate: fn.curry(iterate),
-    iterateN: fn.curry(iterateN),
-    cartesian: fn.curry(cartesian),
-    cartesianN: fn.curry(cartesianN),
-    flatten: flatten,
-    flattenR: flattenR,
-    isArray: isArray,
-    leftPad: fn.curry(leftPad),
-    rightPad: fn.curry(rightPad),
-    span: fn.curry(span),
-    spanPrefix: fn.curry(spanPrefix),
-    pushShift: pushShift,
-    popUnshift: popUnshift,
-    takeWhilePrefix: fn.curry(takeWhilePrefix),
-    equal: fn.curry(equal)
-  }
+  const id = x => x
+  const oAp = (fs, o) => Object.keys(o).reduce((r, k) => {
+    r[k] = (fs[k] || id)(o[k])
+    return r
+  }, {})
+  const oMap = (f, o) => Object.keys(o).reduce((r, k) => {
+    r[k] = f(o[k])
+    return r
+  }, {})
+  const not = curry((p, s) => !p(s))
+
+  /**
+   *
+   * @function module:fun-array.fold
+   *
+   * @param {Function} combine - (a, b) -> a
+   * @param {*} init - first value to use
+   * @param {Array} source - to get values from
+   *
+   * @return {*} result of folding
+   */
+  const fold = (combine, init, source) => source.reduce(combine, init)
 
   /**
    * Structural equality.
@@ -81,43 +45,30 @@
    *
    * @return {Boolean} if a1 and a2 are equal element-wise by eq
    */
-  function equal (eq, a1, a2) {
-    function and (p1, p2) {
-      return p1 && p2
-    }
-
-    return a1.length === a2.length && fold(
-      and,
-      true,
-      zipWith(eq, a1, a2)
-    )
-  }
+  const equal = (eq, a1, a2) => a1.length === a2.length &&
+    fold((a, b) => a && b, true, zipWith(eq, a1, a2))
 
   /**
    *
    * @function module:fun-array.spanPrefix
    *
-   * @param {Function} predicate - [*] -> Bool
+   * @param {Function} p - [x] -> Bool
    * @param {Array} a - to span prefix
    *
    * @return {Array<Array>} [prefix satisfying predicate, rest]
    */
-  function spanPrefix (predicate, a) {
-    return split(takeWhilePrefix(predicate, a).length, a)
-  }
+  const spanPrefix = (p, a) => split(takeWhilePrefix(p, a).length, a)
 
   /**
    *
    * @function module:fun-array.span
    *
-   * @param {Function} predicate - * -> Bool
+   * @param {Function} p - x -> Bool
    * @param {Array} a - to span
    *
    * @return {Array<Array>} [prefix of elements satisfying predicate, rest]
    */
-  function span (predicate, a) {
-    return [takeWhile(predicate, a), dropWhile(predicate, a)]
-  }
+  const span = (p, a) => [takeWhile(p, a), dropWhile(p, a)]
 
   /**
    *
@@ -129,11 +80,9 @@
    *
    * @return {Array} padded with value to length
    */
-  function rightPad (value, length, a) {
-    return a.length >= length
-      ? a
-      : a.concat(repeat(length - a.length, value))
-  }
+  const rightPad = (value, length, a) => a.length >= length
+    ? a
+    : a.concat(repeat(length - a.length, value))
 
   /**
    *
@@ -145,11 +94,9 @@
    *
    * @return {Array} padded with value to length
    */
-  function leftPad (value, length, a) {
-    return a.length >= length
-      ? a
-      : repeat(length - a.length, value).concat(a)
-  }
+  const leftPad = (value, length, a) => a.length >= length
+    ? a
+    : repeat(length - a.length, value).concat(a)
 
   /**
    *
@@ -159,15 +106,11 @@
    *
    * @return {Array<Array>} all permutations of elements of a
    */
-  function permute (a) {
-    return !a.length
-      ? a
-      : a.length === 1
-        ? [a]
-        : flatten(a.map(function (e, i) {
-          return permute(remove(i, a)).map(fn.curry(prepend)(e))
-        }))
-  }
+  const permute = a => !a.length
+    ? a
+    : a.length === 1
+      ? [a]
+      : flatten(a.map((e, i) => map(a => prepend(e, a), permute(remove(i, a)))))
 
   /**
    *
@@ -178,41 +121,28 @@
    *
    * @return {Array<Array>} the cartesian product of the elements of a1 and a2
    */
-  function cartesian (a1, a2) {
-    return a1.map(function (i) {
-      return a2.map(function (j) {
-        return [i, j]
-      })
-    }).reduce(concat, [])
-  }
+  const cartesian = (a1, a2) => flatten(map(i => map(j => [i, j], a2), a1))
 
   /**
    *
    * @function module:fun-array.cartesianN
    *
-   * @param {Array<Array>} arrays - to multiply
+   * @param {Array<Array>} as - arrays to multiply
    *
    * @return {Array<Array>} the n-fold cartesian product of arrays
    */
-  function cartesianN (arrays) {
-    return arrays.reduce(function (result, next) {
-      return cartesian(result, next).map(function (pair) {
-        return append(pair[1], pair[0])
-      })
-    }, [[]])
-  }
+  const cartesianN = as =>
+    fold((r, a) => map(([x, y]) => append(y, x), cartesian(r, a)), [[]], as)
 
   /**
    *
    * @function module:fun-array.flattenR
    *
-   * @param {Array} array - to flatten
+   * @param {Array} a - array to flatten
    *
    * @return {Array} recursively flattened array
    */
-  function flattenR (array) {
-    return unfold(flatten, fn.curry(all)(not(isArray)), array)
-  }
+  const flattenR = a => unfold(flatten, b => all(not(isArray), b), a)
 
   /**
    *
@@ -222,21 +152,17 @@
    *
    * @return {Boolean} if a is an instanceof Array
    */
-  function isArray (a) {
-    return a instanceof Array
-  }
+  const isArray = a => a instanceof Array
 
   /**
    *
    * @function module:fun-array.flatten
    *
-   * @param {Array} array - to flatten
+   * @param {Array} a - array to flatten
    *
    * @return {Array} with one level of nested arrays removed
    */
-  function flatten (array) {
-    return Array.prototype.concat.apply([], array)
-  }
+  const flatten = a => fold(concat, [], a)
 
   /**
    *
@@ -248,8 +174,12 @@
    *
    * @return {Array} seed unfolded with next until stop => true
    */
-  function unfold (next, stop, seed) {
-    return funUnfold(next, stop, seed)
+  const unfold = (next, stop, seed) => {
+    while (!stop(seed)) {
+      seed = next(seed)
+    }
+
+    return seed
   }
 
   /**
@@ -262,19 +192,8 @@
    *
    * @return {Array} [seed, f(seed), f(f(seed)) ...] (length n)
    */
-  function iterateN (f, n, seed) {
-    return unfold(next, fn.compose(gt(n - 1), length), [seed])
-
-    function gt (n) {
-      return function (x) {
-        return x > n
-      }
-    }
-
-    function next (array) {
-      return append(f(last(array)), array)
-    }
-  }
+  const iterateN = (f, n, seed) =>
+    unfold(xs => append(f(last(xs)), xs), xs => xs.length >= n, [seed])
 
   /**
    *
@@ -286,13 +205,8 @@
    *
    * @return {Array} [seed, f(seed), f(f(seed)) ...] (length n)
    */
-  function iterate (f, stop, seed) {
-    return unfold(next, fn.compose(stop, last), [seed])
-
-    function next (array) {
-      return append(f(last(array)), array)
-    }
-  }
+  const iterate = (f, stop, seed) =>
+    unfold(xs => append(f(last(xs)), xs), xs => stop(last(xs)), [seed])
 
   /**
    *
@@ -303,11 +217,8 @@
    *
    * @return {Array} [f(0), ..., f(n - 1)]
    */
-  function sequence (f, n) {
-    return Array.apply(null, { length: n }).map(function (v, i) {
-      return f(i)
-    })
-  }
+  const sequence = (f, n) =>
+    Array.apply(null, { length: n }).map((v, i) => f(i))
 
   /**
    *
@@ -318,9 +229,7 @@
    *
    * @return {Array} of length n containing value for every element
    */
-  function repeat (n, value) {
-    return sequence(fn.k(value), n)
-  }
+  const repeat = (n, value) => sequence(() => value, n)
 
   /**
    *
@@ -331,13 +240,7 @@
    *
    * @return {Array<Number>} [first, ..., last]
    */
-  function range (first, last) {
-    return sequence(addFirst, last - first + 1)
-
-    function addFirst (number) {
-      return first + number
-    }
-  }
+  const range = (first, last) => sequence(n => first + n, last - first + 1)
 
   /**
    *
@@ -347,65 +250,29 @@
    *
    * @return {Array<Number>} [0, 1, ..., n - 1]
    */
-  function index (n) {
-    return sequence(fn.id, n)
-  }
+  const index = n => sequence(id, n)
 
   /**
    *
    * @function module:fun-array.any
    *
    * @param {Function} p - element -> Boolean
-   * @param {Array} source - to check
+   * @param {Array} a - source array to check
    *
    * @return {Boolean} if any element of source passes p
    */
-  function any (p, source) {
-    return source.reduce(function (result, v) {
-      return result || p(v)
-    }, false)
-  }
+  const any = (p, a) => fold((r, v) => r || p(v), false, a)
 
   /**
    *
    * @function module:fun-array.all
    *
    * @param {Function} p - element -> Boolean
-   * @param {Array} source - to check
+   * @param {Array} a - source array to check
    *
    * @return {Boolean} if all elements of source pass p
    */
-  function all (p, source) {
-    return source.reduce(function (result, v) {
-      return result && p(v)
-    }, true)
-  }
-
-  /**
-   *
-   * @function module:fun-array.prepend
-   *
-   * @param {*} v - value to prepend
-   * @param {Array} source - to prepend v to
-   *
-   * @return {Array} [v, ...source]
-   */
-  function prepend (v, source) {
-    return insert(0, v, source)
-  }
-
-  /**
-   *
-   * @function module:fun-array.append
-   *
-   * @param {*} v - value to append
-   * @param {Array} source - to append value to
-   *
-   * @return {Array} [...source, v]
-   */
-  function append (v, source) {
-    return insert(source.length, v, source)
-  }
+  const all = (p, a) => fold((r, v) => r && p(v), true, a)
 
   /**
    *
@@ -413,29 +280,44 @@
    *
    * @param {Number} i - index to insert at
    * @param {*} v - value to insert
-   * @param {Array} source - to insert v into
+   * @param {Array} a - source array to insert v into
    *
    * @return {Array} source with v inserted at i
    */
-  function insert (i, v, source) {
-    return [take(i, source), [v], drop(i, source)].reduce(concat)
-  }
+  const insert = (i, v, a) => [...take(i, a), v, ...drop(i, a)]
+
+  /**
+   *
+   * @function module:fun-array.prepend
+   *
+   * @param {*} v - value to prepend
+   * @param {Array} a - source array to prepend v to
+   *
+   * @return {Array} [v, ...source]
+   */
+  const prepend = (v, a) => [v, ...a]
+
+  /**
+   *
+   * @function module:fun-array.append
+   *
+   * @param {*} v - value to append
+   * @param {Array} a - source array to append value to
+   *
+   * @return {Array} [...source, v]
+   */
+  const append = (v, a) => [...a, v]
 
   /**
    *
    * @function module:fun-array.remove
    *
    * @param {Number} i - index to remove
-   * @param {Array} source - to remove from
+   * @param {Array} a - source array to remove from
    *
    * @return {Array} source without the element at i
    */
-  function remove (i, source) {
-    var result = source.map(fn.id)
-    result.splice(i, 1)
-
-    return result
-  }
+  const remove = (i, a) => a.filter((x, j) => i !== j)
 
   /**
    *
@@ -446,9 +328,7 @@
    *
    * @return {Boolean} if source contains v
    */
-  function contains (v, source) {
-    return source.indexOf(v) !== -1
-  }
+  const contains = (v, source) => source.indexOf(v) !== -1
 
   /**
    *
@@ -459,11 +339,7 @@
    *
    * @return {Array} unique intersection of a1 and a2
    */
-  function intersect (a1, a2) {
-    return unique(a1).filter(function (e) {
-      return contains(e, a2)
-    })
-  }
+  const intersect = (a1, a2) => unique(a1).filter(e => contains(e, a2))
 
   /**
    *
@@ -474,23 +350,17 @@
    *
    * @return {Array} unique union of a1 and a2
    */
-  function union (a1, a2) {
-    return unique(a1.concat(a2))
-  }
+  const union = (a1, a2) => unique(a1.concat(a2))
 
   /**
    *
    * @function module:fun-array.unique
    *
-   * @param {Array} source - to get values from
+   * @param {Array} a - source array to get values from
    *
    * @return {Array} containing only unique elements of source
    */
-  function unique (source) {
-    return source.filter(function (v, i) {
-      return source.indexOf(v) === i
-    })
-  }
+  const unique = a => a.filter((v, i) => a.indexOf(v) === i)
 
   /**
    *
@@ -501,9 +371,7 @@
    *
    * @return {Array<Array>} [filter(p, source), filter(not(p), souce)]
    */
-  function partition (p, source) {
-    return [filter(p, source), filter(not(p), source)]
-  }
+  const partition = (p, source) => [filter(p, source), filter(not(p), source)]
 
   /**
    *
@@ -514,9 +382,51 @@
    *
    * @return {Array} suffix of source from first element to pass p
    */
-  function dropWhile (p, source) {
-    return drop(source.findIndex(not(p)), source)
-  }
+  const dropWhile = (p, source) => source.findIndex(not(p)) === -1
+    ? []
+    : drop(source.findIndex(not(p)), source)
+
+  /**
+   *
+   * @function module:fun-array.push
+   *
+   * @param {*} v - value to append
+   * @param {Array} a - source array to append value to
+   *
+   * @return {Array} [...source, v]
+   */
+  const push = append
+
+  /**
+   *
+   * @function module:fun-array.pop
+   *
+   * @param {Array} a - source array to append value to
+   *
+   * @return {Array} [...source, v]
+   */
+  const pop = a => take(a.length - 1, a)
+
+  /**
+   *
+   * @function module:fun-array.shift
+   *
+   * @param {Array} a - source array to append value to
+   *
+   * @return {Array} [...source, v]
+   */
+  const shift = a => drop(1, a)
+
+  /**
+   *
+   * @function module:fun-array.unshift
+   *
+   * @param {*} v - value to prepend
+   * @param {Array} a - source array to prepend value to
+   *
+   * @return {Array} [...source, v]
+   */
+  const unshift = prepend
 
   /**
    *
@@ -526,11 +436,9 @@
    *
    * @return {Array<Array>} [[a1, ... an-1], [an, b1 ... bn]]
    */
-  function popUnshift (a) {
-    return a[0].length
-      ? split(a[0].length - 1, concat(a[0], a[1]))
-      : a
-  }
+  const popUnshift = a => a[0].length
+    ? split(a[0].length - 1, concat(a[0], a[1]))
+    : a
 
   /**
    *
@@ -540,11 +448,9 @@
    *
    * @return {Array<Array>} [[a1, ... an, b1], [b2, ... bn]]
    */
-  function pushShift (a) {
-    return a[1].length
-      ? split(a[0].length + 1, concat(a[0], a[1]))
-      : a
-  }
+  const pushShift = a => a[1].length
+    ? split(a[0].length + 1, concat(a[0], a[1]))
+    : a
 
   /**
    *
@@ -555,23 +461,13 @@
    *
    * @return {Array} prefix of source for which p is true
    */
-  function takeWhilePrefix (p, source) {
-    return source.reduce(function (prefix, e) {
-      return p(prefix) ? append(e, prefix) : prefix
-    }, []).slice(0, -1)
-  }
-
-  /**
-   *
-   * @function module:fun-array.takeWhile
-   *
-   * @param {Function} p - element -> Boolean
-   * @param {Array} source - to get values from
-   *
-   * @return {Array} prefix of source for which p is true
-   */
-  function takeWhile (p, source) {
-    return take(source.findIndex(not(p)), source)
+  const takeWhilePrefix = (p, source) => {
+    var results = []
+    for (var i = 0; i < source.length; i++) {
+      if (!p(append(source[i], results))) return results
+      results.push(source[i])
+    }
+    return results
   }
 
   /**
@@ -583,9 +479,20 @@
    *
    * @return {Array} sub array of source including first n elements
    */
-  function take (n, source) {
-    return source.slice(0, n)
-  }
+  const take = (n, source) => source.slice(0, n)
+
+  /**
+   *
+   * @function module:fun-array.takeWhile
+   *
+   * @param {Function} p - element -> Boolean
+   * @param {Array} source - to get values from
+   *
+   * @return {Array} prefix of source for which p is true
+   */
+  const takeWhile = (p, source) => source.findIndex(not(p)) === -1
+    ? source
+    : take(source.findIndex(not(p)), source)
 
   /**
    *
@@ -596,9 +503,7 @@
    *
    * @return {Array} sub array of source excluding first n elements
    */
-  function drop (n, source) {
-    return source.slice(n)
-  }
+  const drop = (n, source) => source.slice(n)
 
   /**
    *
@@ -610,36 +515,18 @@
    *
    * @return {Array} sub array from from (inclusive) to to (exclusive)
    */
-  function slice (from, to, source) {
-    return source.slice(from, to)
-  }
+  const slice = (from, to, source) => source.slice(from, to)
 
   /**
    *
    * @function module:fun-array.split
    *
-   * @param {Number} index - to split at
+   * @param {Number} i - index to split at
    * @param {Array} source - to get values from
    *
    * @return {Array<Array>} [prefix, suffix] from splitting at index
    */
-  function split (index, source) {
-    return [take(index, source), drop(index, source)]
-  }
-
-  /**
-   *
-   * @function module:fun-array.fold
-   *
-   * @param {Function} combine - (a, b) -> a
-   * @param {*} init - first value to use
-   * @param {Array} source - to get values from
-   *
-   * @return {*} result of folding
-   */
-  function fold (combine, init, source) {
-    return source.reduce(combine, init)
-  }
+  const split = (i, source) => [take(i, source), drop(i, source)]
 
   /**
    *
@@ -651,11 +538,7 @@
    *
    * @return {Array} [f(a1[0], a2[0]), f(a1[1], a2[1]), ...]
    */
-  function zipWith (f, a1, a2) {
-    return a1.map(function (v, i) {
-      return f(v, a2[i])
-    })
-  }
+  const zipWith = (f, a1, a2) => a1.map((v, i) => f(v, a2[i]))
 
   /**
    *
@@ -665,26 +548,18 @@
    *
    * @return {Number} of elements in this array
    */
-  function length (source) {
-    return source.length
-  }
+  const length = source => source.length
 
   /**
    *
    * @function module:fun-array.reIndex
    *
    * @param {Array<Number>} indices - array of old indices in a new order
-   * @param {Array} source - to get values from
+   * @param {Array} a - source array to get values from
    *
    * @return {Array} in a new order
    */
-  function reIndex (indices, source) {
-    return source.reduce(function (result, value, i) {
-      result[i] = typeof indices[i] === 'number' ? source[indices[i]] : value
-
-      return result
-    }, [])
-  }
+  const reIndex = (indices, a) => map(x => get(x, a), indices)
 
   /**
    *
@@ -695,24 +570,18 @@
    *
    * @return {Array} of values that passed p
    */
-  function filter (p, source) {
-    return source.filter(p)
-  }
+  const filter = (p, source) => source.filter(x => p(x))
 
   /**
    *
    * @function module:fun-array.ap
    *
-   * @param {Array} functions - to apply
-   * @param {Array} source - to get value from
+   * @param {Array} fs - functions to apply
+   * @param {Array} a - source array to get value from
    *
    * @return {Array} [functions[0](source[0]), functions[1](source[1]), ...]
    */
-  function ap (functions, source) {
-    return source.map(function (value, i) {
-      return (functions[i] || id)(value)
-    })
-  }
+  const ap = (fs, a) => a.map((x, i) => (fs[i] || id)(x))
 
   /**
    *
@@ -723,33 +592,7 @@
    *
    * @return {Array} [f(source[1]), f(source[2]), ...]
    */
-  function map (f, source) {
-    return source.map(fn.compose(f, fn.arg(0)))
-  }
-
-  /**
-   *
-   * @function module:fun-array.first
-   *
-   * @param {Array} source - to get value from
-   *
-   * @return {*} first element of source
-   */
-  function first (source) {
-    return get(0, source)
-  }
-
-  /**
-   *
-   * @function module:fun-array.last
-   *
-   * @param {Array} source - to get value from
-   *
-   * @return {*} last element of source
-   */
-  function last (source) {
-    return get(source.length - 1, source)
-  }
+  const map = (f, source) => source.map(x => f(x))
 
   /**
    *
@@ -760,40 +603,51 @@
    *
    * @return {*} value at key
    */
-  function get (index, source) {
-    return source[index]
-  }
+  const get = (index, source) => source[index]
+
+  /**
+   *
+   * @function module:fun-array.first
+   *
+   * @param {Array} source - to get value from
+   *
+   * @return {*} first element of source
+   */
+  const first = source => get(0, source)
+
+  /**
+   *
+   * @function module:fun-array.last
+   *
+   * @param {Array} source - to get value from
+   *
+   * @return {*} last element of source
+   */
+  const last = source => get(source.length - 1, source)
 
   /**
    *
    * @function module:fun-array.set
    *
-   * @param {Number} index - to set
-   * @param {*} value - to set
-   * @param {Array} source - to set value on
+   * @param {Number} i - index to set
+   * @param {*} v - value to set
+   * @param {Array} a - source array to set value on
    *
    * @return {Array} copy of source containing value at index
    */
-  function set (index, value, source) {
-    var result = source.map(id)
-    result[index] = value
-
-    return result
-  }
+  const set = (i, v, a) => a.map((x, j) => j === i ? v : x)
 
   /**
    *
    * @function module:fun-array.update
    *
-   * @param {Number} index - to update
+   * @param {Number} index - index to update
    * @param {Function} f - update function
    * @param {Array} source - to update value on
    *
    * @return {Array} copy of source containing f(value) at index
    */
-  function update (index, f, source) {
-    return set(index, f(get(index, source)), source)
-  }
+  const update = (index, f, source) => set(index, f(get(index, source)), source)
 
   /**
    *
@@ -804,9 +658,7 @@
    *
    * @return {Array} [...a1, ...a2]
    */
-  function concat (a1, a2) {
-    return a1.concat(a2)
-  }
+  const concat = (a1, a2) => a1.concat(a2)
 
   /**
    *
@@ -814,9 +666,7 @@
    *
    * @return {Array} []
    */
-  function empty () {
-    return []
-  }
+  const empty = () => []
 
   /**
    *
@@ -826,9 +676,7 @@
    *
    * @return {Array} [value]
    */
-  function of (value) {
-    return [value]
-  }
+  const of = value => [value]
 
   /**
    *
@@ -838,9 +686,7 @@
    *
    * @return {Array} converted from arrayLike
    */
-  function from (arrayLike) {
-    return Array.prototype.slice.call(arrayLike)
-  }
+  const from = arrayLike => Array.prototype.slice.call(arrayLike)
 
   /**
    *
@@ -850,9 +696,7 @@
    *
    * @return {Array} of values in reverse order
    */
-  function reverse (array) {
-    return map(id, array).reverse()
-  }
+  const reverse = array => map(id, array).reverse()
 
   /**
    *
@@ -863,12 +707,78 @@
    *
    * @return {Array} of values sorted by comparator
    */
-  function sort (comparator, array) {
-    return map(id, array).sort(comparator)
-  }
+  const sort = (comparator, array) => map(id, array).sort(comparator)
 
-  function id (x) {
-    return x
-  }
+  /* exports */
+  const api = { permute, length, reIndex, of, from, empty, concat, map, ap, get,
+    set, update, filter, reverse, sort, zipWith, fold, take, takeWhile, drop,
+    dropWhile, slice, split, partition, unique, union, intersect, contains,
+    insert, remove, append, prepend, all, any, index, range, repeat, sequence,
+    last, first, unfold, iterate, iterateN, cartesian, cartesianN, flatten,
+    flattenR, isArray, leftPad, rightPad, span, spanPrefix, push, pop, shift,
+    unshift, pushShift, popUnshift, takeWhilePrefix, equal }
+
+  const guards = oMap(inputs, {
+    permute: tuple([array]),
+    length: tuple([array]),
+    reIndex: tuple([array, array]),
+    of: vector(1),
+    from: vector(1),
+    concat: tuple([array, array]),
+    map: tuple([fun, array]),
+    ap: tuple([arrayOf(fun), array]),
+    get: tuple([num, array]),
+    set: tuple([num, anything, array]),
+    update: tuple([num, fun, array]),
+    filter: tuple([fun, array]),
+    reverse: tuple([array]),
+    sort: tuple([fun, array]),
+    zipWith: tuple([fun, array, array]),
+    fold: tuple([fun, anything, array]),
+    take: tuple([num, array]),
+    takeWhile: tuple([fun, array]),
+    drop: tuple([num, array]),
+    dropWhile: tuple([fun, array]),
+    slice: tuple([num, num, array]),
+    split: tuple([num, array]),
+    partition: tuple([fun, array]),
+    unique: tuple([array]),
+    union: tuple([array, array]),
+    intersect: tuple([array, array]),
+    contains: tuple([anything, array]),
+    insert: tuple([num, anything, array]),
+    remove: tuple([num, array]),
+    append: tuple([anything, array]),
+    prepend: tuple([anything, array]),
+    all: tuple([fun, array]),
+    any: tuple([fun, array]),
+    index: tuple([num]),
+    range: tuple([num, num]),
+    repeat: tuple([num, anything]),
+    sequence: tuple([fun, num]),
+    last: tuple([array]),
+    first: tuple([array]),
+    unfold: tuple([fun, fun, anything]),
+    iterate: tuple([fun, fun, anything]),
+    iterateN: tuple([fun, num, anything]),
+    cartesian: tuple([array, array]),
+    cartesianN: tuple([arrayOf(array)]),
+    flatten: tuple([arrayOf(array)]),
+    flattenR: tuple([array]),
+    isArray: vector(1),
+    leftPad: tuple([anything, num, array]),
+    rightPad: tuple([anything, num, array]),
+    span: tuple([fun, array]),
+    spanPrefix: tuple([fun, array]),
+    push: tuple([anything, array]),
+    pop: tuple([array]),
+    shift: tuple([array]),
+    unshift: tuple([anything, array]),
+    popUnshift: tuple([vectorOf(2, array)]),
+    takeWhilePrefix: tuple([fun, array]),
+    equal: tuple([fun, array, anything])
+  })
+
+  module.exports = oMap(curry, oAp(guards, api))
 })()
 
