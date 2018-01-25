@@ -41,18 +41,8 @@
 </g>
 <!-- index.js&#45;&gt;../node_modules/guarded/src/index.js -->
 <g id="edge3" class="edge"><title>index.js&#45;&gt;../node_modules/guarded/src/index.js</title>
-<path fill="none" stroke="#757575" d="M547.381,-77.7577C553.831,-75.6694 560.613,-73.6341 567.035,-72 629.405,-56.1295 700.324,-43.284 757.217,-34.2159"/>
-<polygon fill="#757575" stroke="#757575" points="757.976,-37.6395 767.308,-32.6235 756.885,-30.725 757.976,-37.6395"/>
-</g>
-<!-- lib/fun&#45;unfold.js -->
-<g id="node5" class="node"><title>lib/fun&#45;unfold.js</title>
-<ellipse fill="none" stroke="#cfffac" cx="649.035" cy="-90" rx="72.5877" ry="18"/>
-<text text-anchor="middle" x="649.035" y="-86.3" font-family="Arial" font-size="14.00" fill="#cfffac">lib/fun&#45;unfold.js</text>
-</g>
-<!-- lib/not.js -->
-<g id="node6" class="node"><title>lib/not.js</title>
-<ellipse fill="none" stroke="#cfffac" cx="784.035" cy="-90" rx="44.393" ry="18"/>
-<text text-anchor="middle" x="784.035" y="-86.3" font-family="Arial" font-size="14.00" fill="#cfffac">lib/not.js</text>
+<path fill="none" stroke="#757575" d="M553.608,-81.4423C607.238,-70.6545 707.208,-50.5458 779.231,-36.0583"/>
+<polygon fill="#757575" stroke="#757575" points="780.087,-39.4563 789.201,-34.0529 778.707,-32.5937 780.087,-39.4563"/>
 </g>
 </g>
 </svg>

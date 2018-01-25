@@ -44,18 +44,8 @@
 <path fill="none" stroke="#757575" d="M660.653,-76.1609C691.354,-65.6263 735.316,-50.5413 770.369,-38.513"/>
 <polygon fill="#757575" stroke="#757575" points="771.679,-41.764 780.002,-35.2078 769.407,-35.143 771.679,-41.764"/>
 </g>
-<!-- src/lib/fun&#45;unfold.js -->
-<g id="node5" class="node"><title>src/lib/fun&#45;unfold.js</title>
-<ellipse fill="none" stroke="#cfffac" cx="1305.24" cy="-162" rx="87.9851" ry="18"/>
-<text text-anchor="middle" x="1305.24" y="-158.3" font-family="Arial" font-size="14.00" fill="#cfffac">src/lib/fun&#45;unfold.js</text>
-</g>
-<!-- src/lib/not.js -->
-<g id="node6" class="node"><title>src/lib/not.js</title>
-<ellipse fill="none" stroke="#cfffac" cx="1471.24" cy="-162" rx="59.5901" ry="18"/>
-<text text-anchor="middle" x="1471.24" y="-158.3" font-family="Arial" font-size="14.00" fill="#cfffac">src/lib/not.js</text>
-</g>
 <!-- test/index.js -->
-<g id="node7" class="node"><title>test/index.js</title>
+<g id="node5" class="node"><title>test/index.js</title>
 <ellipse fill="none" stroke="#c6c5fe" cx="1139.24" cy="-162" rx="59.5901" ry="18"/>
 <text text-anchor="middle" x="1139.24" y="-158.3" font-family="Arial" font-size="14.00" fill="#c6c5fe">test/index.js</text>
 </g>
@@ -65,7 +55,7 @@
 <polygon fill="#757575" stroke="#757575" points="685.071,-95.8565 674.691,-97.9804 684.13,-102.793 685.071,-95.8565"/>
 </g>
 <!-- node_modules/fun&#45;test&#45;runner/src/index.js -->
-<g id="node8" class="node"><title>node_modules/fun&#45;test&#45;runner/src/index.js</title>
+<g id="node6" class="node"><title>node_modules/fun&#45;test&#45;runner/src/index.js</title>
 <ellipse fill="none" stroke="#cfffac" cx="1139.24" cy="-90" rx="183.068" ry="18"/>
 <text text-anchor="middle" x="1139.24" y="-86.3" font-family="Arial" font-size="14.00" fill="#cfffac">node_modules/fun&#45;test&#45;runner/src/index.js</text>
 </g>
@@ -75,17 +65,17 @@
 <polygon fill="#757575" stroke="#757575" points="1142.74,-118.104 1139.24,-108.104 1135.74,-118.104 1142.74,-118.104"/>
 </g>
 <!-- test/tests.js -->
-<g id="node9" class="node"><title>test/tests.js</title>
+<g id="node7" class="node"><title>test/tests.js</title>
 <ellipse fill="none" stroke="#c6c5fe" cx="1708.24" cy="-90" rx="57.6901" ry="18"/>
 <text text-anchor="middle" x="1708.24" y="-86.3" font-family="Arial" font-size="14.00" fill="#c6c5fe">test/tests.js</text>
 </g>
 <!-- test/index.js&#45;&gt;test/tests.js -->
 <g id="edge6" class="edge"><title>test/index.js&#45;&gt;test/tests.js</title>
-<path fill="none" stroke="#757575" d="M1182.48,-149.393C1190.97,-147.383 1199.85,-145.47 1208.24,-144 1362.33,-116.98 1545.72,-101.816 1641.87,-95.1511"/>
-<polygon fill="#757575" stroke="#757575" points="1642.29,-98.6307 1652.02,-94.4562 1641.81,-91.6471 1642.29,-98.6307"/>
+<path fill="none" stroke="#757575" d="M1193.54,-154.32C1299.4,-141.296 1532.83,-112.579 1645.27,-98.7461"/>
+<polygon fill="#757575" stroke="#757575" points="1645.94,-102.19 1655.44,-97.4951 1645.09,-95.2424 1645.94,-102.19"/>
 </g>
 <!-- node_modules/fun&#45;arrange/src/index.js -->
-<g id="node10" class="node"><title>node_modules/fun&#45;arrange/src/index.js</title>
+<g id="node8" class="node"><title>node_modules/fun&#45;arrange/src/index.js</title>
 <ellipse fill="none" stroke="#cfffac" cx="1174.24" cy="-18" rx="170.87" ry="18"/>
 <text text-anchor="middle" x="1174.24" y="-14.3" font-family="Arial" font-size="14.00" fill="#cfffac">node_modules/fun&#45;arrange/src/index.js</text>
 </g>
@@ -95,7 +85,7 @@
 <polygon fill="#757575" stroke="#757575" points="1287.04,-30.257 1276.67,-32.4275 1286.13,-37.1976 1287.04,-30.257"/>
 </g>
 <!-- node_modules/fun&#45;object/src/index.js -->
-<g id="node11" class="node"><title>node_modules/fun&#45;object/src/index.js</title>
+<g id="node9" class="node"><title>node_modules/fun&#45;object/src/index.js</title>
 <ellipse fill="none" stroke="#cfffac" cx="1528.24" cy="-18" rx="165.171" ry="18"/>
 <text text-anchor="middle" x="1528.24" y="-14.3" font-family="Arial" font-size="14.00" fill="#cfffac">node_modules/fun&#45;object/src/index.js</text>
 </g>
@@ -105,7 +95,7 @@
 <polygon fill="#757575" stroke="#757575" points="1581.03,-35.7744 1570.44,-35.4119 1578.49,-42.2984 1581.03,-35.7744"/>
 </g>
 <!-- node_modules/fun&#45;predicate/src/index.js -->
-<g id="node12" class="node"><title>node_modules/fun&#45;predicate/src/index.js</title>
+<g id="node10" class="node"><title>node_modules/fun&#45;predicate/src/index.js</title>
 <ellipse fill="none" stroke="#cfffac" cx="1889.24" cy="-18" rx="178.168" ry="18"/>
 <text text-anchor="middle" x="1889.24" y="-14.3" font-family="Arial" font-size="14.00" fill="#cfffac">node_modules/fun&#45;predicate/src/index.js</text>
 </g>
@@ -115,7 +105,7 @@
 <polygon fill="#757575" stroke="#757575" points="1838.41,-42.4106 1846.47,-35.5391 1835.88,-35.8819 1838.41,-42.4106"/>
 </g>
 <!-- node_modules/fun&#45;scalar/src/index.js -->
-<g id="node13" class="node"><title>node_modules/fun&#45;scalar/src/index.js</title>
+<g id="node11" class="node"><title>node_modules/fun&#45;scalar/src/index.js</title>
 <ellipse fill="none" stroke="#cfffac" cx="2249.24" cy="-18" rx="163.571" ry="18"/>
 <text text-anchor="middle" x="2249.24" y="-14.3" font-family="Arial" font-size="14.00" fill="#cfffac">node_modules/fun&#45;scalar/src/index.js</text>
 </g>
@@ -125,7 +115,7 @@
 <polygon fill="#757575" stroke="#757575" points="2138.09,-36.9107 2147.56,-32.1564 2137.19,-29.9686 2138.09,-36.9107"/>
 </g>
 <!-- node_modules/fun&#45;test/src/index.js -->
-<g id="node14" class="node"><title>node_modules/fun&#45;test/src/index.js</title>
+<g id="node12" class="node"><title>node_modules/fun&#45;test/src/index.js</title>
 <ellipse fill="none" stroke="#cfffac" cx="2585.24" cy="-18" rx="154.873" ry="18"/>
 <text text-anchor="middle" x="2585.24" y="-14.3" font-family="Arial" font-size="14.00" fill="#cfffac">node_modules/fun&#45;test/src/index.js</text>
 </g>
