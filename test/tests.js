@@ -14,8 +14,10 @@
   const lengthLt3 = a => a.length < 3
   const strictEqual = (a, b) => a === b
   const allEqual2 = as => as.reduce((r, a) => r && a === 2)
+  const upto = n => Array.apply(null, { length: n + 1 }).map((x, i) => i)
 
   const equalityTests = [
+    [[upto, [1, 2, 3]], [0, 1, 0, 1, 2, 0, 1, 2, 3], 'flatMap'],
     [[[1, 2]], [2], 'shift'],
     [[3, [1, 2]], [3, 1, 2], 'unshift'],
     [[[1, 2]], [1], 'pop'],

@@ -156,6 +156,17 @@
 
   /**
    *
+   * @function module:fun-array.flatMap
+   *
+   * @param {Function} f - x -> [x]
+   * @param {Array} xs - array to flatMap
+   *
+   * @return {Array} [x]
+   */
+  const flatMap = (f, xs) => flatten(map(f, xs))
+
+  /**
+   *
    * @function module:fun-array.flatten
    *
    * @param {Array} a - array to flatten
@@ -716,7 +727,7 @@
     insert, remove, append, prepend, all, any, index, range, repeat, sequence,
     last, first, unfold, iterate, iterateN, cartesian, cartesianN, flatten,
     flattenR, isArray, leftPad, rightPad, span, spanPrefix, push, pop, shift,
-    unshift, pushShift, popUnshift, takeWhilePrefix, equal }
+    unshift, pushShift, popUnshift, takeWhilePrefix, equal, flatMap }
 
   const guards = oMap(inputs, {
     permute: tuple([array]),
@@ -776,7 +787,8 @@
     unshift: tuple([anything, array]),
     popUnshift: tuple([vectorOf(2, array)]),
     takeWhilePrefix: tuple([fun, array]),
-    equal: tuple([fun, array, anything])
+    equal: tuple([fun, array, anything]),
+    flatMap: tuple([fun, array])
   })
 
   module.exports = oMap(curry, oAp(guards, api))
