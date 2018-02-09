@@ -2,11 +2,14 @@
   'use strict'
 
   /* imports */
+  const curry = require('fun-curry')
   const arrange = require('fun-arrange')
-  const { equalDeep } = require('fun-predicate')
+  const { equalDeep: equal } = require('fun-predicate')
   const { sync } = require('fun-test')
   const { ap, get } = require('fun-object')
-  const { add, sub, mul, gt, lt } = require('fun-scalar')
+  const { add, sub, mul, div, gt, lt } = require('fun-scalar')
+  const { equalFor } = require('fun-property')
+  const { compose: b } = require('fun-function')
 
   const uncurriedAdd = (a, b) => a + b
   const append1 = a => a.concat(1)
@@ -15,8 +18,38 @@
   const strictEqual = (a, b) => a === b
   const allEqual2 = as => as.reduce((r, a) => r && a === 2)
   const upto = n => Array.apply(null, { length: n + 1 }).map((x, i) => i)
+  const algSum = a => a.length === 2 ? a[0] + a[1] : 0
+  const algDoubleSum = a => 2 * a.length === 2 ? a[0] + a[1] : 0
+  const algHalfSum = a => a.length === 2 ? (a[0] + a[1]) / 2 : 0
+
+  const cataFusion = (() => {
+    const cataFusion = (f, [alg1, alg2], { cata, map }, xs) =>
+      !equalFor([xs], { equal, f1: b(f, alg1), f2: b(alg2, map(f)) }) ||
+      equalFor([xs], { equal, f1: b(f, cata(alg1)), f2: cata(alg2) })
+
+    return curry(cataFusion)
+  })()
+
+  const propertyTests = [
+    ...[[], [1, 2], [-4, 12]].map(x => [x])
+      .map(inputs => ({
+        inputs,
+        predicate: equal(true),
+        contra: cataFusion(mul(2), [algSum, algDoubleSum])
+      })),
+    ...[[], [1, 2], [-4, 12]].map(x => [[x], true])
+      .map(([inputs, truth]) => ({
+        inputs,
+        predicate: equal(truth),
+        contra: cataFusion(div(2), [algSum, algHalfSum])
+      }))
+  ]
 
   const equalityTests = [
+    [[algSum, [1, 2, 3]], 6, 'cata'],
+    [[algSum, [1, 2]], 3, 'cata'],
+    [[algSum, [3]], 3, 'cata'],
+    [[algSum, []], 0, 'cata'],
     [[upto, [1, 2, 3]], [0, 1, 0, 1, 2, 0, 1, 2, 3], 'flatMap'],
     [[[1, 2]], [2], 'shift'],
     [[3, [1, 2]], [3, 1, 2], 'unshift'],
@@ -128,9 +161,9 @@
     [[], [], 'empty'],
     [[9], [9], 'of']
   ].map(arrange({ inputs: 0, predicate: 1, contra: 2 }))
-    .map(x => ap({ predicate: equalDeep, contra: get }, x))
+    .map(x => ap({ predicate: equal, contra: get }, x))
 
   /* exports */
-  module.exports = equalityTests.map(sync)
+  module.exports = equalityTests.concat(propertyTests).map(sync)
 })()
 

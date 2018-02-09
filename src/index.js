@@ -24,6 +24,17 @@
 
   /**
    *
+   * @function module:fun-array.cata
+   *
+   * @param {Function} alg - ([x, x] | []) -> x
+   * @param {Array} xs - to fold
+   *
+   * @return {x} result of folding
+   */
+  const cata = (alg, xs) => xs.reduce((a, b) => alg([a, b]), alg([]))
+
+  /**
+   *
    * @function module:fun-array.fold
    *
    * @param {Function} combine - (a, b) -> a
@@ -727,7 +738,7 @@
     insert, remove, append, prepend, all, any, index, range, repeat, sequence,
     last, first, unfold, iterate, iterateN, cartesian, cartesianN, flatten,
     flattenR, isArray, leftPad, rightPad, span, spanPrefix, push, pop, shift,
-    unshift, pushShift, popUnshift, takeWhilePrefix, equal, flatMap }
+    unshift, pushShift, popUnshift, takeWhilePrefix, equal, flatMap, cata }
 
   const guards = oMap(inputs, {
     permute: tuple([array]),
@@ -788,7 +799,8 @@
     popUnshift: tuple([vectorOf(2, array)]),
     takeWhilePrefix: tuple([fun, array]),
     equal: tuple([fun, array, anything]),
-    flatMap: tuple([fun, array])
+    flatMap: tuple([fun, array]),
+    cata: tuple([fun, array])
   })
 
   module.exports = oMap(curry, oAp(guards, api))
