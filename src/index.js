@@ -43,7 +43,8 @@
    *
    * @return {*} result of folding
    */
-  const fold = (combine, init, source) => source.reduce(combine, init)
+  const fold = (combine, init, source) =>
+    source.reduce((a, b) => combine(a, b), init)
 
   /**
    * Structural equality.
